@@ -1,33 +1,3 @@
-const products = [
-    {
-        image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
-        name: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-        rating: {
-            stars: 'images/ratings/rating-45.png', count: 79
-        },
-        price: 1090,
-        quantity: 100
-    },
-    {
-        image: 'images/products/intermediate-composite-basketball.jpg',
-        name: 'Intermediate Size Basketball',
-        rating: {
-            stars: 'images/ratings/rating-40.png', count: 100
-        },
-        price: 2080,
-        quantity: 100
-    },
-    {
-        image: 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-        name: 'Adults Plain Cotton T-Shirt - 2 Pack',
-        rating: {
-            stars: 'images/ratings/rating-45.png', count: 200
-        },
-        price: 799,
-        quantity: 100
-    }
-];
-
 let prodcutsHtml = '';
 
 products.forEach((product) => {
@@ -76,7 +46,8 @@ products.forEach((product) => {
                 Added
             </div>
 
-            <button class="add-to-cart-button button-primary">
+            <button class="add-to-cart-button button-primary js-add-to-cart"
+            data-product-id = "${product.id}" data-product-name = "${product.name}">
                 Add to Cart
             </button>
             </div>
@@ -85,3 +56,29 @@ products.forEach((product) => {
 
 const gridElement = document.querySelector('.products-grid');
 gridElement.innerHTML = prodcutsHtml;
+
+const addToCartsAllElements = document.querySelectorAll('.js-add-to-cart');
+addToCartsAllElements.forEach((button) => {
+  button.addEventListener('click', () => {
+    let product;
+    cart.forEach(item => {
+      if(item.productId === button.dataset.productId){
+        product = item;
+      }
+    });
+    if(product){
+      product.quantity += 1;
+    } else {
+      cart.push({
+        productId : button.dataset.productId,
+        quantity : 1
+      });
+    }
+    let totalQuantity = 0;
+    cart.forEach((item) => {
+      totalQuantity += item.quantity;
+    });
+    const cartQuantity = document.querySelector('.cart-quantity');
+    cartQuantity.innerHTML = totalQuantity;
+  });
+});
